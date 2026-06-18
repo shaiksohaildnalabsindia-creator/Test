@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parcel Entry</title>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="main-content" id="mainContent">
+  <header class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+    <div class="page-info">
+      <div class="page-title"><span>📦</span><span>Parcel Entry</span></div>
+      <div class="page-subtitle">Add new parcels to the tracking system</div>
+    </div>
+  </header>
+
+  <div class="form-wrapper">
+    <div class="form-container">
+      <div class="header">
+        <h2>📦 Parcel Entry</h2>
+      </div>
+
+      <div class="form-content">
+        <div class="form-group">
+          <label for="trackingNumber">Tracking Number</label>
+          <input type="text" id="trackingNumber" placeholder="Enter tracking number" autocomplete="off" autocapitalize="characters">
+          <div class="error-message" id="trackingError">Please enter a valid tracking number</div>
+        </div>
+
+        <div class="form-group">
+          <label for="bookingDate">Booking Date</label>
+          <input type="date" id="bookingDate">
+          <div class="error-message" id="dateError">Please select a valid date</div>
+        </div>
+
+        <div class="form-group">
+          <label for="fromAddress">From Address</label>
+          <input type="text" id="fromAddress" placeholder="Enter sender's address" autocomplete="off">
+          <div class="error-message" id="addressError">Please enter a valid address</div>
+        </div>
+
+        <div class="button-group">
+          <button class="submit-btn" onclick="submitParcel()" id="submitBtn">
+            <span>📦</span><span>Add Parcel</span>
+          </button>
+          <button class="clear-btn" onclick="clearForm()">
+            <span>🗑️</span><span>Clear Form</span>
+          </button>
+        </div>
+        <div class="status-container" id="status" style="display: none; margin-top: 20px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="sidebar.js"></script>
+
+<script>
+// DOM Elements
+const trackingInput = document.getElementById('trackingNumber');
+const dateInput = document.getElementById('bookingDate');
+const addressInput = document.getElementById('fromAddress');
+const submitBtn = document.getElementById('submitBtn');
+const toast = document.getElementById('toast');
+
+dateInput.max = new Date().toISOString().split('T')[0];
+
+function showToast(message, type = 'success') {
+  toast.textContent = message;
+  toast.className = `toast toast-${type} show`;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function clearForm() {
+  trackingInput.value = '';
+  dateInput.value = '';
+  addressInput.value = '';
+}
+
+function submitParcel() {
+  const trackingNumber = trackingInput.value.trim();
+  const bookingDate = dateInput.value;
+  const fromAddress = addressInput.value.trim();
+
+  if (!trackingNumber || !bookingDate || !fromAddress) { 
+    showToast("All fields are required", 'error'); 
+    return; 
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span>⏳</span><span>Adding...</span>';
+
+  // USING THE API URL FROM config.js
+  fetch(CONFIG.API_URL, {
+    method: "POST",
+    body: JSON.stringify({ trackingNumber, bookingDate, fromAddress }),
+    mode: 'no-cors' 
+  })
+  .then(() => {
+    showToast("Parcel submitted! Check your Google Sheet.", 'success');
+    clearForm();
+  })
+  .catch(err => {
+    console.error(err);
+    showToast("Error submitting parcel.", 'error');
+  })
+  .finally(() => {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>📦</span><span>Add Parcel</span>';
+  });
+}
+</script>
+</body>
+</html>

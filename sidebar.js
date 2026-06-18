@@ -22,7 +22,6 @@ function loadSidebar() {
             </a>
             <a href="upload_sample_images.html" class="menu-item" data-page="upload_sample_images.html">
               <span class="menu-item-icon">📷</span><span class="menu-item-text">Upload Images</span>
-              <span class="menu-item-badge">New</span>
             </a>
           </div>
         </div>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parcel Dashboard</title>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="main-content" id="mainContent">
+  <header class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+    <div class="page-info">
+      <div class="page-title">
+        <div class="logo-icon" style="font-size: 24px;">📦</div>
+        <span>Parcel Pro Dashboard</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <div class="grid">
+      <div class="box" onclick="window.location.href='parcel_entry.html'" tabindex="0">
+        <div class="box-icon" style="color: #3b82f6;">📦📝</div>
+        <div class="box-text">Parcel Entry</div>
+      </div>
+
+      <div class="box" onclick="window.location.href='parcel_entry_form.html'" tabindex="0">
+        <div class="box-icon" style="color: #10b981;">📦🔍</div>
+        <div class="box-text">Parcel Scanner</div>
+      </div>
+
+      <div class="box" onclick="window.location.href='upload_sample_images.html'" tabindex="0">
+        <div class="box-icon" style="color: #f59e0b;">📷</div>
+        <div class="box-text">Upload Images</div>
+      </div>
+
+      <div class="box" onclick="window.location.href='delivered_today.html'" tabindex="0">
+        <div class="box-icon" style="color: #ef4444;">📅</div>
+        <div class="box-text">Delivered Today</div>
+      </div>
+
+      <div class="box" onclick="window.location.href='gallery.html'" tabindex="0">
+        <div class="box-icon" style="color: #8b5cf6;">🖼️</div>
+        <div class="box-text">Sample Gallery</div>
+      </div>
+
+      <div class="box" onclick="window.location.href='total.html'" tabindex="0">
+        <div class="box-icon" style="color: #06b6d4;">📊</div>
+        <div class="box-text">Total Samples</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="sidebar.js"></script>
+
+</body>
+</html>

@@ -249,12 +249,12 @@ function clearCache() {
 function updateCacheIndicator(isCached) {
   isFromCache = isCached;
   if (isCached) {
-    cacheIndicator.style.display = 'inline-block';
-    cacheIndicator.textContent = 'Cached';
+    cacheIndicator.style.display = 'none';
+    cacheIndicator.textContent = '';
     cacheIndicator.className = 'cache-indicator fresh';
   } else {
-    cacheIndicator.style.display = 'inline-block';
-    cacheIndicator.textContent = 'Live';
+    cacheIndicator.style.display = 'none';
+    cacheIndicator.textContent = '';
     cacheIndicator.className = 'cache-indicator';
   }
 }

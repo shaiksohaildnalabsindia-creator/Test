@@ -2,7 +2,7 @@
 (function checkAuth() {
     const token = localStorage.getItem('parcel_pro_token');
     const loginTime = localStorage.getItem('parcel_pro_login_time');
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPage = window.location.pathname.split('/').pop() || 'Dashboard.html';
 
     const EXPIRY_TIME = 48 * 60 * 60 * 1000; 
 
@@ -13,13 +13,13 @@
         }
     }
 
-    if ((!token || isExpired) && currentPage !== 'login.html') {
+    if ((!token || isExpired) && currentPage !== 'login') {
         logoutUser(); 
         return; 
     }
 
-    if (token && !isExpired && currentPage === 'login.html') {
-        window.location.replace('index.html');
+    if (token && !isExpired && currentPage === 'login') {
+        window.location.replace('Dashboard.html');
     }
 })();
 
@@ -28,8 +28,8 @@ function logoutUser() {
     localStorage.removeItem('parcel_pro_user');
     localStorage.removeItem('parcel_pro_login_time');
     
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    if (currentPage !== 'login.html') {
-        window.location.replace('login.html');
+    const currentPage = window.location.pathname.split('/').pop() || 'Dashboard.html';
+    if (currentPage !== 'login') {
+        window.location.replace('login');
     }
 }

@@ -150,16 +150,18 @@
       </div>
       <div class="page-subtitle">View and search all parcels in the system</div>
     </div>
+    <button class="refresh-btn" onclick="forceRefresh()">
+      <span>🔄</span>
+      <span>Refresh</span>
+    </button>
   </header>
 
   <div class="content-wrapper">
     <div class="content-container">  
-      <div class="header">
         <div class="stats-card">
           <span id="count">0</span>
           <span class="stats-label">Total Parcels</span>
         </div>
-      </div>  
 
       <div class="controls-container">
         <div class="controls">
@@ -178,11 +180,6 @@
               <option value="Not Picked">Not Picked</option>
             </select>
           </div>
-
-          <button class="refresh-btn" onclick="forceRefresh()">
-            <span>🔄</span>
-            <span>Refresh</span>
-          </button>
         </div>
       </div>
 

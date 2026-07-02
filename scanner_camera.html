@@ -199,14 +199,6 @@
       <input type="text" id="manualTracking" placeholder="Enter tracking number" autocomplete="off">
     </div>
 
-    <div class="form-group">
-      <label for="trackingDropdown">Select from Pre-loaded List:</label>
-      <select id="trackingDropdown">
-        <option>Loading...</option>
-      </select>
-      <small>Select a number to auto-fill the field above.</small>
-    </div>
-
     <div class="modal-actions">
       <button id="submitManualEntry" class="btn-primary">Submit Entry</button>
       <button id="cancelManualEntry" class="btn-secondary">Cancel</button>
@@ -247,7 +239,6 @@ const manualModal = document.getElementById('manualEntryModal');
 const cancelManualBtn = document.getElementById('cancelManualEntry');
 const submitManualBtn = document.getElementById('submitManualEntry');
 const manualTrackingInput = document.getElementById('manualTracking');
-const trackingDropdown = document.getElementById('trackingDropdown');
 
 // Get courier & count from URL
 const params = new URLSearchParams(window.location.search);
@@ -263,28 +254,17 @@ let resizeObserver = null;
 let manualEntryCount = 0;
 let noScanTimer = null;
 
-// Load tracking numbers from config file URLs
-function loadTrackingNumbers() {
-  fetch(CONFIG.TRACKING_SCRIPT_URL)
-    .then(res => res.json())
-    .then(data => {
-      trackingDropdown.innerHTML = '<option value="">Select Tracking Number</option>';
-      data.forEach(num => {
-        const option = document.createElement("option");
-        option.value = num;
-        option.textContent = num;
-        trackingDropdown.appendChild(option);
-      });
-    })
-    .catch(err => {
-      console.error("Error loading tracking numbers:", err);
-      trackingDropdown.innerHTML = '<option value="">Error loading tracking numbers</option>';
-    });
+// --- NEW: Audio & Vibration Feedback Function ---
+function playSuccessFeedback() {
+  // 1. Play the beep sound
+  beep.currentTime = 0; 
+  beep.play().catch(() => {});
+  
+  // 2. Trigger phone vibration (200 milliseconds)
+  if (navigator.vibrate) {
+    navigator.vibrate(200); 
+  }
 }
-
-trackingDropdown.addEventListener("change", () => {
-  manualTrackingInput.value = trackingDropdown.value;
-});
 
 updateProgress();
 
@@ -315,7 +295,7 @@ function showCompletePanel() {
       countdownEl.textContent = `Redirecting to dashboard in ${countdown} seconds...`;
     } else {
       clearInterval(countdownInterval);
-      window.location.href = "Dashboard";
+      window.location.href = "index.html";
     }
   }, 1000);
 }
@@ -413,7 +393,9 @@ function startScanner() {
       resultEl.textContent = code;
       barcodeTypeEl.innerHTML = `<span class="barcode-icon">${is2D ? '⬜' : '📏'}</span><span>${is2D ? '2D Code' : 'Linear'}</span>`;
       
-      beep.currentTime = 0; beep.play().catch(() => {});
+      // Use the new feedback function (Beep + Vibrate)
+      playSuccessFeedback();
+      
       saveTrackingNumber(code, is2D ? '2D Code' : 'Linear Barcode', format.toString());
       updateProgress();
     });
@@ -472,7 +454,9 @@ async function handleManualEntry() {
   
   resultEl.textContent = tracking;
   barcodeTypeEl.innerHTML = `<span>📝 Manual Entry</span>`;
-  beep.currentTime = 0; beep.play().catch(() => {});
+  
+  // Use the new feedback function (Beep + Vibrate)
+  playSuccessFeedback();
   
   await saveTrackingNumber(tracking, "Manual Entry", "Manual", true);
   updateProgress();
@@ -529,6 +513,5 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) video.pause(); else if (currentStream && video.paused) video.play();
 });
 </script>
-
 </body>
 </html>
